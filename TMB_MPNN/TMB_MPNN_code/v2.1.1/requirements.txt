@@ -1,0 +1,12 @@
+mmengine
+prody
+biotite
+numpy==1.25.1
+periodictable
+dm-tree
+modelcif
+ml_collections
+pandas
+biopython==1.84
+#pdbx
+#openbibel
