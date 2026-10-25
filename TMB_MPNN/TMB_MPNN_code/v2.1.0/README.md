@@ -1,3 +1,9 @@
+> **Note:** this is internal development documentation, kept for reference. The
+> commands below point at IPD-internal container and checkpoint paths and will
+> not resolve outside the cluster. For a supported, portable workflow see the
+> [top-level README](../../../README.md) and the runnable example in
+> [run_TMB_MPNN_example/](../../run_TMB_MPNN_example/).
+
 # MPNN inferencer V2.0
 
 The new MPNN inferencer unifies the training and inference processes, making model delivery easier.

@@ -180,3 +180,14 @@ This pipeline assumes access to:
 * a SLURM cluster
 * GPU resources for full-scale runs
 * Singularity or Apptainer
+
+---
+
+## License
+
+This repository is released under the BSD 3-Clause License ([LICENSE](LICENSE)).
+
+Third-party code is vendored into `TMB_MPNN/TMB_MPNN_code/` and stays under its
+own license — notably MMPretrain and OpenFold, both Apache License 2.0. See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the full list and the
+locations of the license texts.
