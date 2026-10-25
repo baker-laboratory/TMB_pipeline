@@ -152,6 +152,48 @@ export TMB_MPNN_APPTAINER_PATH="$ENV_DIR/TMB_MPNN.sif"
 
 ---
 
+## 7. Run the TMB_MPNN example
+
+The example lives in [TMB_MPNN/run_TMB_MPNN_example](TMB_MPNN/run_TMB_MPNN_example).
+
+**Regenerate the JSON inputs first.** The `pdbs_multi_json.jsonl` and
+`intf_buried.jsonl` files committed to this repository contain absolute paths
+from the machine where they were generated, so they will not resolve on your
+system. `make_json_input_for_TMB_MPNN.py` writes both files, keyed by the
+resolved path of each backbone:
+
+```bash
+cd "$TMB_PIPELINE_DIR/TMB_MPNN/run_TMB_MPNN_example"
+
+apptainer exec "$MODULUS_APPTAINER_PATH" \
+  python make_json_input_for_TMB_MPNN.py 100 0.25 ./backbones/*.pdb
+```
+
+The two positional arguments are the transmembrane depth (Å) and the interface
+fraction. Rerun this whenever you move the directory or change the backbones.
+
+Then run the design job:
+
+```bash
+bash submit_TMB_MPNN.sh
+```
+
+Outputs are written to `./TMB_MPNN_sequences`: one FASTA per backbone under
+`seqs/`, and side-chain-packed structures under `packed/`.
+
+Some batches are discarded by design — `--threonine_serine_threshold` rejects
+batches whose sequences exceed the given fraction of serine and threonine, so
+`Discarding this batch due to plenty of serines and threonines` in the log is
+expected, not an error.
+
+The script requests a GPU via `apptainer exec --nv`. Sequence design also runs
+on CPU if you drop the `--nv` flag, which is slower but needs no GPU.
+
+The hydrophobic-thickness variant in
+[TMB_MPNN/run_TMB_MPNN_longer_hydrophobic_example](TMB_MPNN/run_TMB_MPNN_longer_hydrophobic_example)
+follows the same pattern, using `$TMB_MPNN_COND_CKPT_PATH` and its own
+`make_pdb_json_intf_buried.py`.
+
 ---
 
 ## Distillation set notebook
