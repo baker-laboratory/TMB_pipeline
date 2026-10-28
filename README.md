@@ -49,7 +49,17 @@ curl -O https://files.ipd.uw.edu/pub/TMB_pipeline/TMB_MPNN/TMB_MPNN.pth
 
 # TMB_MPNN checkpoint for tuning hydrophobic thickness
 curl -O https://files.ipd.uw.edu/pub/TMB_pipeline/TMB_MPNN/TMB_MPNN_tuning_hydrophobic_thickness.pth
+
+# LigandMPNN side-chain packing model, required by --pack_side_chains
+curl -O https://files.ipd.uw.edu/pub/ligandmpnn/ligandmpnn_sc_v_32_002_16.pt
 ```
+
+The side-chain packer is the unmodified side-chain packing model from the
+public [LigandMPNN](https://github.com/dauparas/LigandMPNN) release, so it is
+downloaded from that project's own directory rather than from
+`pub/TMB_pipeline/`. `run.py` defaults `--checkpoint_path_sc` to an
+IPD-internal path, so the example scripts pass it explicitly from
+`TMB_MPNN_SC_CKPT_PATH`.
 
 Set checkpoint paths.
 
@@ -58,6 +68,7 @@ export TMB_RFD2_CKPT_PATH="$WEIGHTS_DIR/TMB_RFD2.pt"
 export TMB_RFD2_MOTIF_SCAFFOLDING_CKPT_PATH="$WEIGHTS_DIR/TMB_RFD2_motif_scaffolding.pt"
 export TMB_MPNN_CKPT_PATH="$WEIGHTS_DIR/TMB_MPNN.pth"
 export TMB_MPNN_COND_CKPT_PATH="$WEIGHTS_DIR/TMB_MPNN_tuning_hydrophobic_thickness.pth"
+export TMB_MPNN_SC_CKPT_PATH="$WEIGHTS_DIR/ligandmpnn_sc_v_32_002_16.pt"
 ```
 
 ---
@@ -110,6 +121,7 @@ echo "$TMB_RFD2_CKPT_PATH"
 echo "$TMB_RFD2_MOTIF_SCAFFOLDING_CKPT_PATH"
 echo "$TMB_MPNN_CKPT_PATH"
 echo "$TMB_MPNN_COND_CKPT_PATH"
+echo "$TMB_MPNN_SC_CKPT_PATH"
 
 echo "$MODULUS_APPTAINER_PATH"
 echo "$TMB_RFD2_APPTAINER_PATH"
@@ -123,6 +135,7 @@ ls "$TMB_RFD2_CKPT_PATH"
 ls "$TMB_RFD2_MOTIF_SCAFFOLDING_CKPT_PATH"
 ls "$TMB_MPNN_CKPT_PATH"
 ls "$TMB_MPNN_COND_CKPT_PATH"
+ls "$TMB_MPNN_SC_CKPT_PATH"
 
 ls "$MODULUS_APPTAINER_PATH"
 ls "$TMB_RFD2_APPTAINER_PATH"
@@ -144,6 +157,7 @@ export TMB_RFD2_CKPT_PATH="$WEIGHTS_DIR/TMB_RFD2.pt"
 export TMB_RFD2_MOTIF_SCAFFOLDING_CKPT_PATH="$WEIGHTS_DIR/TMB_RFD2_motif_scaffolding.pt"
 export TMB_MPNN_CKPT_PATH="$WEIGHTS_DIR/TMB_MPNN.pth"
 export TMB_MPNN_COND_CKPT_PATH="$WEIGHTS_DIR/TMB_MPNN_tuning_hydrophobic_thickness.pth"
+export TMB_MPNN_SC_CKPT_PATH="$WEIGHTS_DIR/ligandmpnn_sc_v_32_002_16.pt"
 
 export MODULUS_APPTAINER_PATH="$ENV_DIR/modulus_latest.sif"
 export TMB_RFD2_APPTAINER_PATH="$ENV_DIR/TMB_RFD2.sif"

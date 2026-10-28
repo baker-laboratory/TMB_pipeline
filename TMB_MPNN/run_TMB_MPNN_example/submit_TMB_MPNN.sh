@@ -7,6 +7,7 @@ ENV_DIR="${ENV_DIR:-$TMB_PIPELINE_DIR/environments}"
 
 TMB_MPNN_APPTAINER_PATH="${TMB_MPNN_APPTAINER_PATH:-$ENV_DIR/TMB_MPNN.sif}"
 TMB_MPNN_CKPT_PATH="${TMB_MPNN_CKPT_PATH:-$WEIGHTS_DIR/TMB_MPNN.pth}"
+TMB_MPNN_SC_CKPT_PATH="${TMB_MPNN_SC_CKPT_PATH:-$WEIGHTS_DIR/ligandmpnn_sc_v_32_002_16.pt}"
 
 echo "# dummy cv2 for headless TMB_MPNN run" > cv2.py
 
@@ -19,6 +20,7 @@ python "$TMB_PIPELINE_DIR/TMB_MPNN/TMB_MPNN_code/v2.1.1/run.py" \
     --batch_size 5 \
     --number_of_batches 2 \
     --pack_side_chains 1 \
+    --checkpoint_path_sc "$TMB_MPNN_SC_CKPT_PATH" \
     --threonine_serine_threshold 0.25 \
     --serthre_bias -0.5 \
     --tmbb_surface_condition_multi ./intf_buried.jsonl
