@@ -33,7 +33,22 @@ You may change the directory names if desired, but make sure the exported paths 
 
 ## 3. Download model weights
 
-Navigate to the weights directory and download the checkpoints.
+Run the download script from the repository root. It is safe to re-run: files
+that already exist are left alone, so an existing checkout fetches only what it
+is missing.
+
+```bash
+./download_assets.sh              # weights only (~1.9 GB)
+./download_assets.sh --containers # weights and containers (~30 GB)
+```
+
+If you already set up this repository before the side-chain packer was
+documented, `git pull` followed by `./download_assets.sh` brings you current:
+the pull updates the code and examples, and the script fetches the one weight
+file you are missing.
+
+<details>
+<summary>Equivalent manual downloads</summary>
 
 ```bash
 cd "$WEIGHTS_DIR"
@@ -53,6 +68,8 @@ curl -O https://files.ipd.uw.edu/pub/TMB_pipeline/TMB_MPNN/TMB_MPNN_tuning_hydro
 # LigandMPNN side-chain packing model, required by --pack_side_chains
 curl -O https://files.ipd.uw.edu/pub/ligandmpnn/ligandmpnn_sc_v_32_002_16.pt
 ```
+
+</details>
 
 The side-chain packer is the unmodified side-chain packing model from the
 public [LigandMPNN](https://github.com/dauparas/LigandMPNN) release, so it is
@@ -75,7 +92,8 @@ export TMB_MPNN_SC_CKPT_PATH="$WEIGHTS_DIR/ligandmpnn_sc_v_32_002_16.pt"
 
 ## 4. Set up the environment: Singularity / Apptainer
 
-Navigate to the environments directory and download the containers.
+`./download_assets.sh --containers` fetches these as well. To do it by hand,
+navigate to the environments directory and download them.
 
 ```bash
 cd "$ENV_DIR"
