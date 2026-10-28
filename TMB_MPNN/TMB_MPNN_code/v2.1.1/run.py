@@ -32,6 +32,7 @@ from mpnn.datasets.residue_mapping import (
     restype_STRtoINT,
 )
 from sc_utils import Packer, pack_side_chains
+from checkpoint_utils import default_sc_checkpoint, require_sc_checkpoint
 
 
 def build_model(cfg: Optional[dict] = None, checkpoint=None, enhance=None, device="cpu"):
@@ -68,6 +69,9 @@ def build_model(cfg: Optional[dict] = None, checkpoint=None, enhance=None, devic
 
 
 def main(args):
+
+    if args.pack_side_chains:
+        args.checkpoint_path_sc = require_sc_checkpoint(args.checkpoint_path_sc)
 
     # fix seeds
     if args.seed:
@@ -811,7 +815,7 @@ if __name__ == "__main__":
 
     argparser.add_argument("--out_folder", type=str, default="output", help="Path to a folder to output sequences, e.g. /home/out/")
     argparser.add_argument("--file_ending", type=str, default="", help="adding_string_to_the_end")
-    argparser.add_argument("--checkpoint_path_sc", type=str, default="/projects/ml/struc2seq/ligandMPNN_models/b_v1/s_300756.pt", help="Path to model weights.")
+    argparser.add_argument("--checkpoint_path_sc", type=str, default=default_sc_checkpoint(), help="LigandMPNN side-chain weights; defaults to TMB_MPNN_SC_CKPT_PATH or WEIGHTS_DIR/ligandmpnn_sc_v_32_002_16.pt (repository weights/ by default).")
     argparser.add_argument("--packed_suffix", type=str, default="_packed", help="Suffix for packed PDB paths")
     argparser.add_argument("--force_hetatm", type=int, default=1, help="Deprecated argument, kept only for backwards compatibility.")
     argparser.add_argument("--zero_indexed", type=str, default=0, help="1 - to start output PDB numbering with 0")

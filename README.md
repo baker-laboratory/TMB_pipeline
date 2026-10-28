@@ -74,9 +74,12 @@ curl -O https://files.ipd.uw.edu/pub/ligandmpnn/ligandmpnn_sc_v_32_002_16.pt
 The side-chain packer is the unmodified side-chain packing model from the
 public [LigandMPNN](https://github.com/dauparas/LigandMPNN) release, so it is
 downloaded from that project's own directory rather than from
-`pub/TMB_pipeline/`. `run.py` defaults `--checkpoint_path_sc` to an
-IPD-internal path, so the example scripts pass it explicitly from
-`TMB_MPNN_SC_CKPT_PATH`.
+`pub/TMB_pipeline/`. The supported `v2.1.1/run.py` finds these weights in the
+repository's `weights/` directory regardless of your working directory. You
+can override this with `WEIGHTS_DIR`, `TMB_MPNN_SC_CKPT_PATH`, or explicitly
+with `--checkpoint_path_sc` (highest priority). Missing or empty packing
+checkpoints produce an error with download instructions before the sequence
+model is loaded. The example scripts also pass the checkpoint explicitly.
 
 Set checkpoint paths.
 
@@ -227,6 +230,33 @@ follows the same pattern, using `$TMB_MPNN_COND_CKPT_PATH` and its own
 `make_pdb_json_intf_buried.py`.
 
 ---
+
+## CPU unit tests
+
+Run the focused tests from the repository root using the supplied container:
+
+```bash
+apptainer exec --env PYTHONDONTWRITEBYTECODE=1,OMP_NUM_THREADS=2,MKL_NUM_THREADS=2 \
+  environments/TMB_MPNN.sif python -m unittest discover -s tests -v
+```
+
+These tests need no model weights, GPU, network access, or external datasets.
+They cover TMB_RFD2 barrel adjacency, secondary-structure and glycine-twist
+conditioning, tensor output, and rotation geometry; and TMB_MPNN checkpoint
+discovery, masked sequence scoring, chain-aware pair bias, and side-chain
+packing geometry. The packer computation test uses random weights and checks
+shapes, finite coordinates, residue masks, and C-alpha preservation, not design
+quality. The container provides dependencies for both suites.
+
+To run only one suite, add `-p 'test_tmb_rfd2.py'` or `-p 'test_tmb_mpnn.py'`
+to the command. The checkpoint-path tests also run with plain Python:
+
+```bash
+python -m unittest discover -s tests -p 'test_checkpoint_paths.py' -v
+```
+
+These focused tests are separate from the vendored training and integration
+tests, which require additional datasets and environments.
 
 ## Distillation set notebook
 
